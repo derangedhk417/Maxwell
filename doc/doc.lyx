@@ -552,12 +552,28 @@ The total induced EMF (voltage) around a loop, as a function of the magnetic
  field surrounding it.
 \end_layout
 
+\begin_layout Enumerate
+The force on a loop as a function of the magnetic field surrounding it.
+\end_layout
+
 \begin_layout Standard
 Armed with these two functions, we can fully characterize the magnetic fields
  produced by a coil and the inductive kickback it experiences due to a change
  in its own magnetic field and due to the magnetic field of the projectile
  coil.
- The field produced by a line current is given generally by,
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Magnetic Field Produced by a Loop
+\end_layout
+
+\begin_layout Standard
+The field produced by a line current is given generally by,
 \begin_inset Formula 
 \begin{align}
 \mathbf{B}\left(\mathbf{r}\right) & =\cfrac{\mu_{0}I}{4\pi}\int_{\ell}\cfrac{d\mathbf{l}^{\prime}\times\hat{\boldsymbol{\delta}}}{\delta^{2}}\label{eq:B_of_I}\\
@@ -679,14 +695,18 @@ B_{z} & =\cfrac{\mu_{0}I}{4\pi}\int_{0}^{2\pi}\cfrac{r_{\ell}^{2}\sin^{2}\varphi
 \begin_inset Newline newline
 \end_inset
 
-To summarize this concisely
+To summarize this concisely,
+\end_layout
+
+\begin_layout Standard
+\noindent
 \begin_inset Formula 
-\begin{align*}
-B_{x} & =\cfrac{\mu_{0}I}{4\pi}\int_{0}^{2\pi}\cfrac{zr_{\ell}\cos\varphi^{\prime}-z_{\ell}r_{\ell}\cos\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\\
-B_{y} & =\cfrac{\mu_{0}I}{4\pi}\int_{0}^{2\pi}\cfrac{zr_{\ell}\sin\varphi^{\prime}-z_{\ell}r_{\ell}\sin\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\\
-B_{z} & =\cfrac{\mu_{0}I}{4\pi}\int_{0}^{2\pi}\cfrac{r_{\ell}^{2}-yr_{\ell}\sin\varphi^{\prime}-xr_{\ell}\cos\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\\
+\begin{align}
+B_{x} & =\left(z-z_{\ell}\right)\cfrac{\mu_{0}Ir_{\ell}}{4\pi}\int_{0}^{2\pi}\cfrac{\cos\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\\
+B_{y} & =\left(z-z_{\ell}\right)\cfrac{\mu_{0}Ir_{\ell}}{4\pi}\int_{0}^{2\pi}\cfrac{\sin\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\\
+B_{z} & =\cfrac{\mu_{0}Ir_{\ell}}{4\pi}\left\{ r_{\ell}\int_{0}^{2\pi}\cfrac{1}{\delta^{3}}\,d\varphi^{\prime}-y\int_{0}^{2\pi}\cfrac{\sin\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}-x\int_{0}^{2\pi}\cfrac{\cos\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\right\} \\
 \delta^{3} & =\left[r_{\ell}^{2}+x^{2}+y^{2}-2r_{\ell}\left(x\cos\varphi^{\prime}+y\sin\varphi^{\prime}\right)+\left(z-z_{\ell}\right)^{2}\right]^{3/2}
-\end{align*}
+\end{align}
 
 \end_inset
 
@@ -731,6 +751,285 @@ reference "eq:coil_superposition"
 \end_inset
 
 .
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Induced EMF in a Loop
+\end_layout
+
+\begin_layout Standard
+\noindent
+Starting with Faraday's law
+\begin_inset Formula 
+\begin{align*}
+\boldsymbol{\nabla}\times\mathbf{E} & =-\cfrac{\partial\mathbf{B}}{\partial t}\\
+\int_{S}\left(\boldsymbol{\nabla}\times\mathbf{E}\right)\cdot d\mathbf{a} & =-\cfrac{\partial}{\partial t}\int_{S}\mathbf{B}\cdot d\mathbf{a}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Applying Stoke's theorem,
+\begin_inset Formula 
+\begin{align*}
+\int_{S}\left(\boldsymbol{\nabla}\times\mathbf{E}\right)\cdot d\mathbf{a} & =\int_{\ell}\mathbf{E}\cdot d\mathbf{l}\\
+V_{\ell} & =\int_{\ell}\mathbf{E}\cdot d\mathbf{l}\\
+\therefore\int_{\ell}\mathbf{E}\cdot d\mathbf{l} & =-\cfrac{\partial}{\partial t}\int_{S}\mathbf{B}\cdot d\mathbf{a}\\
+\therefore V_{\ell} & =-\cfrac{\partial}{\partial t}\int_{S}\mathbf{B}\cdot d\mathbf{a}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Where 
+\begin_inset Formula $V_{\ell}$
+\end_inset
+
+ is the induced voltage around the entire loop and the current through the
+ loop is given by 
+\begin_inset Formula $I=V_{\ell}/R$
+\end_inset
+
+, where 
+\begin_inset Formula $R$
+\end_inset
+
+ is the resistance of the loop.
+ Since Stoke's theorem applies for any arbitrary surface 
+\begin_inset Formula $S$
+\end_inset
+
+, we can choose this to be the most simple surface that bounds the loop.
+ That is, the surface formed by a plane, bounded by the loop (a circle).
+ We can write this integral in cylindrical coordinates,
+\begin_inset Formula 
+\begin{align*}
+-\cfrac{\partial}{\partial t}\int_{S}\mathbf{B}\cdot d\mathbf{a}\\
+d\mathbf{a} & =\hat{\mathbf{n}}da=\hat{\mathbf{n}}r\,d\varphi\,dr=\hat{z}r\,d\varphi\,dr\\
+\mathbf{B}\cdot d\mathbf{a} & =B_{z}r\,d\varphi\,dr\\
+\int_{S}\mathbf{B}\cdot d\mathbf{a} & =\int_{0}^{r_{\ell}}\int_{0}^{2\pi}B_{z}\left(r\cos\varphi,\,r\sin\varphi,\,z_{\ell}\right)r\,d\varphi\,dr\\
+\therefore V_{\ell} & =-\cfrac{\partial}{\partial t}\int_{0}^{r_{\ell}}\int_{0}^{2\pi}B_{z}\left(r\cos\varphi,\,r\sin\varphi,\,z_{\ell}\right)r\,d\varphi\,dr\\
+B_{z} & =B_{z}\left(x,\,y,\,z\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+To summarize, the induced EMF around a loop is,
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Formula 
+\begin{align}
+V_{\ell} & =-\cfrac{\partial}{\partial t}\int_{0}^{r_{\ell}}\int_{0}^{2\pi}B_{z}\left(r\cos\varphi,\,r\sin\varphi,\,z_{\ell}\right)r\,d\varphi\,dr\\
+B_{z} & =B_{z}\left(x,\,y,\,z\right)
+\end{align}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In order to convert this into the current through a coil, we need to sum
+ the EMF around all of the loops and divide this my the sum of the resistance
+ of all of the loops (because the loops are effectively in series).
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align}
+I_{\mathcal{C}} & =\cfrac{\sum_{i=1}^{N_{l}}V_{\ell}^{i}}{\sum_{i=1}^{N_{l}}R_{\ell}^{i}}
+\end{align}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+where 
+\begin_inset Formula $N_{l}$
+\end_inset
+
+ is the number of loops in a coil, 
+\begin_inset Formula $V_{\ell}^{i}$
+\end_inset
+
+ denotes the EMF around the 
+\begin_inset Formula $i$
+\end_inset
+
+th coil and 
+\begin_inset Formula $R_{\ell}^{i}$
+\end_inset
+
+ denotes the resistance of the 
+\begin_inset Formula $i$
+\end_inset
+
+th coil.
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Force on A Loop Due to Magnetic Field
+\end_layout
+
+\begin_layout Standard
+The force on a loop due to a magnetic field can be derived from the Lorentz
+ force law.
+ Since the loops are made of neutral wire, we can write
+\begin_inset Formula 
+\begin{align}
+\mathbf{F} & =q\left(\cancel{\mathbf{E}}+\mathbf{v}\times\mathbf{B}\right)=q\mathbf{v}\times\mathbf{B}\label{eq:Lorentz_Force}
+\end{align}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Next, we need to convert this to an expression in terms of the current through
+ a wire and the average velocity of the electrons in the wire.
+ Current is defined as an amount of charge passing through a point per unit
+ time (coulombs per second in SI units).
+ 
+\begin_inset Formula 
+\begin{align*}
+I & =\cfrac{dQ}{dt}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+where 
+\begin_inset Formula $dQ$
+\end_inset
+
+ is effectively charge per unit length times the distance traveled
+\begin_inset Formula 
+\begin{align*}
+dQ & =\lambda\,dx\\
+I & =\lambda\cfrac{dx}{dt}\\
+I & =\lambda v
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+where 
+\begin_inset Formula $\lambda$
+\end_inset
+
+ is the charge per unit length in the wire.
+ From this, we can write,
+\begin_inset Formula 
+\begin{align*}
+d\mathbf{F} & =q\mathbf{v}\times\mathbf{B}\\
+ & =\lambda\mathbf{v}\,dl\times\mathbf{B}\\
+ & =I\,d\mathbf{l}\times\mathbf{B}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Where 
+\begin_inset Formula $d\mathbf{l}$
+\end_inset
+
+ is an infinitesimal vector pointing in the direction of the current.
+ Next,
+\begin_inset Formula 
+\begin{align*}
+d\mathbf{F} & =I\,d\mathbf{l}\times\mathbf{B}\\
+\mathbf{F} & =I\int_{\ell}d\mathbf{l}\times\mathbf{B}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Where the integral is over the entire loop.
+ Writing this explicitly, for the case of the loop defined in 
+\begin_inset Formula $\mathsection2.1$
+\end_inset
+
+,
+\begin_inset Formula 
+\begin{align}
+d\mathbf{l} & =r_{\ell}d\varphi\hat{\varphi}=-r_{\ell}\sin\varphi\,d\varphi\hat{x}+r_{\ell}\cos\varphi\,d\varphi\hat{y}\nonumber \\
+\mathbf{B} & =B_{x}\hat{x}+B_{y}\hat{y}+B_{z}\hat{z}\nonumber \\
+d\mathbf{l}\times\mathbf{B} & =\left|\begin{array}{ccc}
+\hat{x} & \hat{y} & \hat{z}\\
+-r_{\ell}\sin\varphi d\varphi & r_{\ell}\cos\varphi\,d\varphi & 0\\
+B_{x} & B_{y} & B_{z}
+\end{array}\right|\nonumber \\
+ & =B_{z}r_{\ell}\cos\varphi\,d\varphi\hat{x}+B_{z}r_{\ell}\sin\varphi\,d\varphi\hat{y}-\left[B_{y}\sin\varphi+B_{x}\cos\varphi\right]r_{\ell}\,d\varphi\hat{z}\nonumber \\
+F_{x} & =Ir_{\ell}\int_{0}^{2\pi}B_{z}\left(r_{\ell}\cos\varphi,\,r_{\ell}\sin\varphi,\,z_{\ell}\right)\cos\varphi\,d\varphi\\
+F_{y} & =Ir_{\ell}\int_{0}^{2\pi}B_{z}\left(r_{\ell}\cos\varphi,\,r_{\ell}\sin\varphi,\,z_{\ell}\right)\sin\varphi\,d\varphi\\
+F_{z} & =-Ir_{\ell}\left\{ \int_{0}^{2\pi}B_{y}\left(r_{\ell}\cos\varphi,\,r_{\ell}\sin\varphi,\,z_{\ell}\right)\sin\varphi\,d\varphi+\int_{0}^{2\pi}B_{x}\left(r_{\ell}\cos\varphi,\,r_{\ell}\sin\varphi,\,z_{\ell}\right)\cos\varphi\,d\varphi\right\} \\
+B_{i} & =B_{i}\left(x,\,y,\,z\right)\quad\forall\;i\in\left\{ x,\,y,\,z\right\} \nonumber 
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Summary
+\end_layout
+
+\begin_layout Standard
+We now have expressions for the magnetic field produced by a loop with a
+ constant current, the voltage induced in a loop due to the magnetic field
+ around it and the force on a current carrying loop due to the magnetic
+ field around it.
+ These equations can be inserted into an equation of the form of eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:coil_superposition"
+
+\end_inset
+
+ in order to calculate the field, induced voltage and force on a coil comprised
+ of multiple loops.
+ It should be noted that the fact that these fields propagate at the speed
+ of light (rather than instantaneously) has been neglected.
+ This is a good approximation because the device is small and the field
+ pulses are very slow relative to the speed of light.
 \end_layout
 
 \end_body
