@@ -1,0 +1,737 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1.5cm
+\topmargin 1.5cm
+\rightmargin 1.5cm
+\bottommargin 1.5cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Maxwell: Mathematical Documentation
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Overview
+\end_layout
+
+\begin_layout Standard
+This document contains documentation and development of the mathematical
+ model used in simulating the Maxwell device.
+ This is the short code name for the linear accelerator gun that this project
+ is meant to produce.
+ I will refer to the unmoving device that contains the accelerator coils
+ as the 
+\begin_inset Quotes eld
+\end_inset
+
+accelerator
+\begin_inset Quotes erd
+\end_inset
+
+ and the moving coil as the 
+\begin_inset Quotes eld
+\end_inset
+
+projectile
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The combined device is referred to as the Maxwell device.
+ The focus of this mathematical model and its accompanying computational
+ model, is to understand the relationship between the design variables of
+ the device and its performance.
+ Loosely speaking these design variables are
+\begin_inset Formula 
+\begin{align*}
+V_{AC} & \quad\mathrm{The\;voltage\;of\;the\;supply\;capacitor\;array.} & C_{AC} & \quad\mathrm{The\;capacitance\;of\;the\;capacitor\;array.}\\
+N_{AC} & \quad\mathrm{The\;number\;of\;accelerator\;coils.} & R_{ACO} & \quad\mathrm{The\;outer\;radius\;of\;the\;accelerator\;coils.}\\
+D_{AC} & \quad\mathrm{The\;center\;to\;center\;spacing\;of\;accelerator\;coils.} & R_{ACI} & \quad\mathrm{The\;inner\;radius\;of\;the\;accelerator\;coils.}\\
+\sigma_{AC} & \quad\mathrm{The\;conductivity\;of\;accelerator\;coil\;material.} & L_{AC} & \quad\mathrm{The\;length\;of\;the\;accelerator\;coils.}\\
+c_{AC} & \quad\mathrm{The\;specific\;heat\;of\;accelerator\;coil\;material.} & r_{AC} & \quad\mathrm{The\;radius\;of\;accelerator\;coil\;wire.}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+for the accelerator and
+\begin_inset Formula 
+\begin{align*}
+V_{PC} & \quad\mathrm{The\;voltage\;of\;the\;projectile\;capacitor\;array.} & C_{PC} & \quad\mathrm{The\;capacitance\;of\;the\;projectile\;capacitor.}\\
+\sigma_{PC} & \quad\mathrm{The\;conductivity\;of\;projectile\;coil\;material.} & R_{PCO} & \quad\mathrm{The\;outer\;radius\;of\;the\;projectile\;coil.}\\
+c_{PC} & \quad\mathrm{The\;specific\;heat\;of\;projectile\;coil\;material.} & R_{PCI} & \quad\mathrm{The\;inner\;radius\;of\;the\;projectile\;coil.}\\
+r_{PC} & \quad\mathrm{The\;radius\;of\;projectile\;coil\;wire.} & L_{PC} & \quad\mathrm{The\;length\;of\;the\;projectile\;coil.}\\
+m_{P} & \quad\mathrm{The\;mass\;of\;the\;projectile.}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+for the projectile.
+ Some of these variables act as constraints on eachother.
+ For example, 
+\begin_inset Formula $R_{ACI}$
+\end_inset
+
+ must be greater than or equal to 
+\begin_inset Formula $R_{PCO}+\delta_{p}$
+\end_inset
+
+ where 
+\begin_inset Formula $\delta_{p}$
+\end_inset
+
+ is the thickness of the material surrounding the projectile coil.
+ In addition to these variables, the coefficient of friction between the
+ projectile and the interior of the accelerator must be considered.
+ The effects of drag on the projectile during acceleration should also be
+ taken into account.
+ In accounting for drag, I will adopt a simple model that considers only
+ linear and quadratic drag.
+ The associated variables will then be
+\begin_inset Formula 
+\begin{align*}
+a & \quad\mathrm{The\;linear\;coefficient\;of\;drag.} & b & \quad\mathrm{The\;quadratic\;coefficient\;of\;drag.}\\
+\Gamma & \quad\mathrm{The\;drag\;force\;per\;unit\;contacting\;surface\;area\;per\;unit\;normal\;force\;per\;unit\;velocity.}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The most important dependent variables that will be extracted from the simulatio
+n are
+\begin_inset Formula 
+\begin{align*}
+v_{P} & \quad\mathrm{The\;muzzle\;velocity\;of\;the\;projectile.} & E_{P} & \quad\mathrm{The\;muzzle\;energy\;of\;the\;projectile.}\\
+\alpha & \quad\mathrm{The\;efficiency\;of\;conversion\;from\;electric\;to\;kinetic\;energy.}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Motivation and Challenges
+\end_layout
+
+\begin_layout Standard
+The goal of this model is to confidently determine the design variables
+ necessary to produce a device that is both effective in use and cost effective
+ to produce.
+ A complicated simulation of the electrodynamics with some consideration
+ of the thermodynamics and kinetics of the system is necessary to do this.
+ As a result, a full treatment of classical electrodynamics will be used.
+ Additionally, simple modeling of the heating of the coils and the frictional
+ forces on the projectile will be used.
+ The results of repeated simulations should allow for the construction of
+ a list of necessary parts and determination of the time and money necessary
+ to build a device.
+\end_layout
+
+\begin_layout Subsection
+Simulation Scope
+\end_layout
+
+\begin_layout Standard
+This simulation will use a full classical treatment of Maxwell's equations
+ to simulate the electrodynamics of the system.
+ The geometry of the coils will be considered in an approximate, but fairly
+ accurate manner.
+ The projectile will have a single translational degree of freedom.
+ Future improvements on the simulation may involve inducing a spin on the
+ projectile and considering torque forces outside of the axis of motion
+ (due to imperfect coil geometry).
+ The temperature of the coils after sequential firings will be considered.
+ The temperature dependence of the conductivity of the coil material may
+ also be integrated into the final system of differential equations.
+ The drag and friction forces that the projectile experiences during acceleratio
+n will be approximated with a simple model.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+The ultimate goal of this project is to develop an accurate system of differenti
+al equations that describes the system outlined above.
+ This will be converted into a numerical method for solving the equation.
+ This method will be implemented, likely in Python or Julia, and used to
+ simulate the Maxwell device.
+\end_layout
+
+\begin_layout Subsection
+Reference Format
+\end_layout
+
+\begin_layout Standard
+In this document I will reference several books.
+ In this section, I will define the shorthand for referencing and the book
+ that it refers to.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+Introduction to Electrodynamics, Fourth Edition, David J.
+ Griffiths
+\begin_inset Newline newline
+\end_inset
+
+
+\series default
+I will reference this as (EM G, p.
+ 100, eq.
+ 4.5.6) where the page number is 100 and the equation number is 4.5.6.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+Classical Mechanics, John R.
+ Taylor
+\begin_inset Newline newline
+\end_inset
+
+
+\series default
+I will reference this as (CM T, p.
+ 100, eq.
+ 4.5.6) where the page number is 100 and the equation number is 4.5.6.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Thermal physics textbook not yet determined.
+ Probably Reif for something like that.
+\end_layout
+
+\begin_layout Section
+Component Modeling
+\end_layout
+
+\begin_layout Standard
+This section is concerned with the mathematical model used to define the
+ shape and electrical characteristics of the primary components in the system.
+ These are, in order of descending complexity, the coils, the power transistors
+ and the capacitors.
+ All other parts of the system can be treated in a more simple manner and
+ are not involved in the simulation.
+ These include but are not limited to the sensors in the barrel, the firing
+ circuitry, the barrel material, the power supply and the projectile circuitry.
+\end_layout
+
+\begin_layout Subsection
+Coils
+\end_layout
+
+\begin_layout Standard
+The most accurate way of modeling the coils would involve characterizing
+ them as a corkscrew shaped continuum of material comprised of a deformed
+ cylinder.
+ This creates substantial complications in the modeling and is unnecessary
+ in the limit where the radius of the wire is significantly smaller than
+ the other dimensions of the coil.
+ As such, coils will be treated as a series of concentric rings stacked
+ vertically, with appropriate spacing between rings, reflecting the radius
+ of the wire they are comprised of.
+ In the simulation, they will be treated as line currents.
+ The path of a single loop of wire can be described as
+\begin_inset Formula 
+\begin{align*}
+r\left(u\right) & =r_{\ell} & r\left(u\right) & =\sqrt{r_{\ell}^{2}+z_{\ell}^{2}} & x\left(u\right) & =r_{\ell}\cos u\\
+\varphi\left(u\right) & =u & \theta\left(u\right) & =\tan^{-1}\left(r_{\ell}/z_{\ell}\right) & y\left(u\right) & =r_{\ell}\sin u\\
+z\left(u\right) & =z_{\ell} & \phi\left(u\right) & =u & z\left(u\right) & =z_{\ell}\\
+u & \in\left[0,\,2\pi\right] & u & \in\left[0,\,2\pi\right] & u & \in\left[0,\,2\pi\right]
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+parametrically in cylindrical coordinates (left), spherical coordinates
+ (middle) and cartesian coordinates (right).
+ Here 
+\begin_inset Formula $u$
+\end_inset
+
+ is an arbitrary parameter.
+ If one wishes to describe this loop implicitly, rather than parametrically,
+ it can be written
+\begin_inset Formula 
+\begin{align*}
+x^{2}+y^{2} & =r_{\ell}^{2}\\
+z & =z_{\ell}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+in cartesian coordinates.
+ Here 
+\begin_inset Formula $r_{\ell}$
+\end_inset
+
+ is the radius of the loop and 
+\begin_inset Formula $z_{\ell}$
+\end_inset
+
+ is the displacement of the loop above the 
+\begin_inset Formula $z$
+\end_inset
+
+ axis.
+ The Cartesian coordinates used are right handed, with the cylindrical 
+\begin_inset Formula $\varphi=0$
+\end_inset
+
+ (spherical 
+\begin_inset Formula $\phi=0$
+\end_inset
+
+) corresponding to the 
+\begin_inset Formula $x$
+\end_inset
+
+ axis.
+ The current density produced by a coil can be written,
+\begin_inset Formula 
+\begin{align}
+\mathbf{J}_{\ell}\left(r,\,\varphi,\,z\right) & =I\delta\left(r-r_{\ell}\right)\delta\left(z-z_{\ell}\right)\,\hat{\varphi}\label{eq:cylindrical_current}\\
+\mathbf{J}_{\ell}\left(r,\,\theta,\,\phi\right) & =I\delta\left(r-\sqrt{r_{\ell}^{2}+z_{\ell}^{2}}\right)\delta\left(\theta-\tan^{-1}\left[r_{\ell}/z_{\ell}\right]\right)\,\hat{\phi}\label{eq:spherical_current}\\
+\mathbf{J}_{\ell}\left(x,\,y,\,z\right) & =I\delta\left(r-\sqrt{r_{\ell}^{2}+z_{\ell}^{2}}\right)\delta\left(\theta-\tan^{-1}\left[r_{\ell}/z_{\ell}\right]\right)\left(\cos\phi\,\hat{y}-\sin\phi\,\hat{x}\right)\label{eq:cartesian_current}
+\end{align}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+\theta & =\tan^{-1}\cfrac{\sqrt{x^{2}+y^{2}}}{z} & r & =\sqrt{x^{2}+y^{2}+z^{2}} & \phi & =\tan^{-1}\left(y/x\right)
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+where 
+\begin_inset Formula $\delta$
+\end_inset
+
+ is the Dirac delta function.
+ These are necessary because this model characterizes wires as line currents.
+ In an abstract sense, a loop will be denoted 
+\begin_inset Formula $\ell_{r}^{z}$
+\end_inset
+
+, which can be read as a loop of radius 
+\begin_inset Formula $r$
+\end_inset
+
+ at height 
+\begin_inset Formula $z$
+\end_inset
+
+.
+ A coil of wire with wire radius 
+\begin_inset Formula $r_{w}$
+\end_inset
+
+, length 
+\begin_inset Formula $l_{c}$
+\end_inset
+
+, inner radius 
+\begin_inset Formula $r_{i}$
+\end_inset
+
+ and outer radius 
+\begin_inset Formula $r_{o}$
+\end_inset
+
+ can be described as a superposition of these loops.
+ If we treat the lower bound of the loop as being at 
+\begin_inset Formula $z=z_{l}$
+\end_inset
+
+ and the loop axis (the normal vector of the loop plane) being aligned with
+ the 
+\begin_inset Formula $z$
+\end_inset
+
+ axis, we can write a coil as
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align}
+\mathcal{C} & =\sum_{k=1}^{(r_{o}-r_{i})/2r_{w}}\left\{ \sum_{j=1}^{l_{c}/2r_{w}}\ell_{r_{i}+r_{w}/2+2r_{w}\left(k-1\right)}^{2r_{w}(j-1)+z_{l}}\right\} \label{eq:coil_superposition}
+\end{align}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+In general, this means that the behavior of a coil 
+\begin_inset Formula $\mathcal{C}$
+\end_inset
+
+ as a whole can be treated as the superposition of the behaviors of a sum
+ of loops 
+\begin_inset Formula $\ell_{r}^{z}$
+\end_inset
+
+.
+ This sum is of course, nonsensical if 
+\begin_inset Formula $l_{c}$
+\end_inset
+
+ is not an integral multiple of 
+\begin_inset Formula $r_{w}$
+\end_inset
+
+ and 
+\begin_inset Formula $r_{o}-r_{i}$
+\end_inset
+
+ is not an integral multiple of 
+\begin_inset Formula $r_{w}$
+\end_inset
+
+.
+ In order to construct a differential equation to model this system, we
+ need several important functions.
+ These are
+\end_layout
+
+\begin_layout Enumerate
+The magnetic field produced by a loop 
+\begin_inset Formula $\ell_{r}^{z}$
+\end_inset
+
+, as a function of the current 
+\begin_inset Formula $I$
+\end_inset
+
+ running through it.
+\end_layout
+
+\begin_layout Enumerate
+The total induced EMF (voltage) around a loop, as a function of the magnetic
+ field surrounding it.
+\end_layout
+
+\begin_layout Standard
+Armed with these two functions, we can fully characterize the magnetic fields
+ produced by a coil and the inductive kickback it experiences due to a change
+ in its own magnetic field and due to the magnetic field of the projectile
+ coil.
+ The field produced by a line current is given generally by,
+\begin_inset Formula 
+\begin{align}
+\mathbf{B}\left(\mathbf{r}\right) & =\cfrac{\mu_{0}I}{4\pi}\int_{\ell}\cfrac{d\mathbf{l}^{\prime}\times\hat{\boldsymbol{\delta}}}{\delta^{2}}\label{eq:B_of_I}\\
+\boldsymbol{\delta} & =\mathbf{r}-\mathbf{r}^{\prime}\nonumber 
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+(EM G, p.
+ 224, eq.
+ 5.34)
+\end_layout
+
+\begin_layout Standard
+\noindent
+where 
+\begin_inset Formula $\boldsymbol{\delta}$
+\end_inset
+
+ is the displacement vector from the point where the current is measured
+ to the point where the magnetic field is measured.
+ 
+\begin_inset Formula $d\mathbf{l}^{\prime}$
+\end_inset
+
+ is an infinitesimal vector pointing in the direction of the current.
+ From this general expression, we can generate a more specific expression
+ for the integral in the case of the loop defined in this section (
+\begin_inset Formula $\ell_{r}^{z}$
+\end_inset
+
+).
+ First, I will recast eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:cartesian_current"
+
+\end_inset
+
+ as a current vector expression.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Formula 
+\begin{align*}
+\mathbf{I}_{\ell}\left(x,\,y,\,z\right) & =\begin{cases}
+I\cos\phi\,\hat{y}-I\sin\phi\,\hat{x} & z=z_{\ell},\,r=r_{\ell}\\
+0 & \mathrm{otherwise}
+\end{cases}\\
+\sin\phi & =\sin\tan^{-1}\left(y/x\right)=\cfrac{y}{x\sqrt{y^{2}/x^{2}+1}}\\
+\cos\phi & =\cos\tan^{-1}\left(y/x\right)=\cfrac{1}{\sqrt{y^{2}/x^{2}+1}}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+With this, we can rewrite eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:B_of_I"
+
+\end_inset
+
+ more explicitly
+\begin_inset Formula 
+\begin{align*}
+d\mathbf{l}^{\prime} & =r_{\ell}d\varphi^{\prime}\hat{\varphi}=-r_{\ell}\sin\varphi^{\prime}d\varphi^{\prime}\hat{x}+r_{\ell}\cos\varphi^{\prime}d\varphi^{\prime}\hat{y}\\
+\hat{\boldsymbol{\delta}} & =\cfrac{\mathbf{r}-\mathbf{r}^{\prime}}{\left|\mathbf{r}-\mathbf{r}^{\prime}\right|}\\
+\mathbf{r}-\mathbf{r}^{\prime} & =\left(x-x^{\prime}\right)\hat{x}+\left(y-y^{\prime}\right)\hat{y}+\left(z-z^{\prime}\right)\hat{z}\\
+ & =\left(x-x^{\prime}\right)\hat{x}+\left(y-y^{\prime}\right)\hat{y}+\left(z-z_{\ell}\right)\hat{z}\\
+ & =\left(x-r_{\ell}\cos\varphi^{\prime}\right)\hat{x}+\left(y-r_{\ell}\sin\varphi^{\prime}\right)\hat{y}+\left(z-z_{\ell}\right)\hat{z}\\
+\left|\mathbf{r}-\mathbf{r}^{\prime}\right| & =\sqrt{\left(x-x^{\prime}\right)^{2}+\left(y-y^{\prime}\right)^{2}+\left(z-z_{\ell}\right)^{2}}\\
+ & =\sqrt{\left(x-r_{\ell}\cos\varphi^{\prime}\right)^{2}+\left(y-r_{\ell}\sin\varphi^{\prime}\right)^{2}+\left(z-z_{\ell}\right)^{2}}\\
+\therefore\hat{\boldsymbol{\delta}} & =\left[\left(x-r_{\ell}\cos\varphi^{\prime}\right)^{2}+\left(y-r_{\ell}\sin\varphi^{\prime}\right)^{2}+\left(z-z_{\ell}\right)^{2}\right]^{-1/2}\left[\left(x-r_{\ell}\cos\varphi^{\prime}\right)\hat{x}+\left(y-r_{\ell}\sin\varphi^{\prime}\right)\hat{y}+\left(z-z_{\ell}\right)\hat{z}\right]\\
+d\mathbf{l}^{\prime}\times\hat{\boldsymbol{\delta}} & =\delta^{-1}\left[-r_{\ell}\sin\varphi^{\prime}d\varphi^{\prime}\hat{x}+r_{\ell}\cos\varphi^{\prime}d\varphi^{\prime}\hat{y}\right]\times\left[\left(x-r_{\ell}\cos\varphi^{\prime}\right)\hat{x}+\left(y-r_{\ell}\sin\varphi^{\prime}\right)\hat{y}+\left(z-z_{\ell}\right)\hat{z}\right]\\
+ & =\delta^{-1}\left|\begin{array}{ccc}
+\hat{x} & \hat{y} & \hat{z}\\
+-r_{\ell}\sin\varphi^{\prime}d\varphi^{\prime} & r_{\ell}\cos\varphi^{\prime}d\varphi^{\prime} & 0\\
+x-r_{\ell}\cos\varphi^{\prime} & y-r_{\ell}\sin\varphi^{\prime} & z-z_{\ell}
+\end{array}\right|\\
+ & =\delta^{-1}\left(r_{\ell}\cos\varphi^{\prime}d\varphi^{\prime}\right)\left(z-z_{\ell}\right)\hat{x}\\
+ & +\delta^{-1}\left(z-z_{\ell}\right)\left(r_{\ell}\sin\varphi^{\prime}d\varphi^{\prime}\right)\hat{y}\\
+ & +\delta^{-1}\left[\left(-r_{\ell}\sin\varphi^{\prime}d\varphi^{\prime}\right)\left(y-r_{\ell}\sin\varphi^{\prime}\right)-\left(r_{\ell}\cos\varphi^{\prime}d\varphi^{\prime}\right)\left(x-r_{\ell}\cos\varphi^{\prime}\right)\right]\hat{z}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Writing the full expression for the magnetic field in terms of its components,
+\begin_inset Formula 
+\begin{align*}
+B_{x} & =\cfrac{\mu_{0}I}{4\pi}\int_{0}^{2\pi}\cfrac{zr_{\ell}\cos\varphi^{\prime}-z_{\ell}r_{\ell}\cos\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\\
+B_{y} & =\cfrac{\mu_{0}I}{4\pi}\int_{0}^{2\pi}\cfrac{zr_{\ell}\sin\varphi^{\prime}-z_{\ell}r_{\ell}\sin\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\\
+B_{z} & =\cfrac{\mu_{0}I}{4\pi}\int_{0}^{2\pi}\cfrac{r_{\ell}^{2}\sin^{2}\varphi^{\prime}+r_{\ell}^{2}\cos^{2}\varphi^{\prime}-yr_{\ell}\sin\varphi^{\prime}-xr_{\ell}\cos\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\\
+ & =\cfrac{\mu_{0}I}{4\pi}\int_{0}^{2\pi}\cfrac{r_{\ell}^{2}-yr_{\ell}\sin\varphi^{\prime}-xr_{\ell}\cos\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\\
+\delta^{3} & =\left[\left(x-r_{\ell}\cos\varphi^{\prime}\right)^{2}+\left(y-r_{\ell}\sin\varphi^{\prime}\right)^{2}+\left(z-z_{\ell}\right)^{2}\right]^{3/2}\\
+ & =\left[x^{2}-2xr_{\ell}\cos\varphi^{\prime}+r_{\ell}^{2}\cos^{2}\varphi^{\prime}+y^{2}-2yr_{\ell}\sin\varphi^{\prime}+r_{\ell}^{2}\sin^{2}\varphi^{\prime}+\left(z-z_{\ell}\right)^{2}\right]^{3/2}\\
+ & =\left[r_{\ell}^{2}+x^{2}+y^{2}-2r_{\ell}\left(x\cos\varphi^{\prime}+y\sin\varphi^{\prime}\right)+\left(z-z_{\ell}\right)^{2}\right]^{3/2}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+To summarize this concisely
+\begin_inset Formula 
+\begin{align*}
+B_{x} & =\cfrac{\mu_{0}I}{4\pi}\int_{0}^{2\pi}\cfrac{zr_{\ell}\cos\varphi^{\prime}-z_{\ell}r_{\ell}\cos\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\\
+B_{y} & =\cfrac{\mu_{0}I}{4\pi}\int_{0}^{2\pi}\cfrac{zr_{\ell}\sin\varphi^{\prime}-z_{\ell}r_{\ell}\sin\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\\
+B_{z} & =\cfrac{\mu_{0}I}{4\pi}\int_{0}^{2\pi}\cfrac{r_{\ell}^{2}-yr_{\ell}\sin\varphi^{\prime}-xr_{\ell}\cos\varphi^{\prime}}{\delta^{3}}\,d\varphi^{\prime}\\
+\delta^{3} & =\left[r_{\ell}^{2}+x^{2}+y^{2}-2r_{\ell}\left(x\cos\varphi^{\prime}+y\sin\varphi^{\prime}\right)+\left(z-z_{\ell}\right)^{2}\right]^{3/2}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+These expressions are extremely easy to evaluate numerically.
+ This provides us with a method of quickly determining the magnetic field
+ vector due to a current carrying loop with current 
+\begin_inset Formula $I$
+\end_inset
+
+ radius 
+\begin_inset Formula $r_{\ell}$
+\end_inset
+
+ and displacement along the 
+\begin_inset Formula $z$
+\end_inset
+
+ axis of 
+\begin_inset Formula $z_{\ell}$
+\end_inset
+
+.
+ In order to determine the magnetic field produced by a coil, we simply
+ evaluate these expressions for each case of 
+\begin_inset Formula $r_{\ell}$
+\end_inset
+
+ and 
+\begin_inset Formula $z_{\ell}$
+\end_inset
+
+ in eq.
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:coil_superposition"
+
+\end_inset
+
+.
+\end_layout
+
+\end_body
+\end_document
