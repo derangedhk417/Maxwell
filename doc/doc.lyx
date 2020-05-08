@@ -998,7 +998,7 @@ B_{x} & B_{y} & B_{z}
  & =B_{z}r_{\ell}\cos\varphi\,d\varphi\hat{x}+B_{z}r_{\ell}\sin\varphi\,d\varphi\hat{y}-\left[B_{y}\sin\varphi+B_{x}\cos\varphi\right]r_{\ell}\,d\varphi\hat{z}\nonumber \\
 F_{x} & =Ir_{\ell}\int_{0}^{2\pi}B_{z}\left(r_{\ell}\cos\varphi,\,r_{\ell}\sin\varphi,\,z_{\ell}\right)\cos\varphi\,d\varphi\\
 F_{y} & =Ir_{\ell}\int_{0}^{2\pi}B_{z}\left(r_{\ell}\cos\varphi,\,r_{\ell}\sin\varphi,\,z_{\ell}\right)\sin\varphi\,d\varphi\\
-F_{z} & =-Ir_{\ell}\left\{ \int_{0}^{2\pi}B_{y}\left(r_{\ell}\cos\varphi,\,r_{\ell}\sin\varphi,\,z_{\ell}\right)\sin\varphi\,d\varphi+\int_{0}^{2\pi}B_{x}\left(r_{\ell}\cos\varphi,\,r_{\ell}\sin\varphi,\,z_{\ell}\right)\cos\varphi\,d\varphi\right\} \\
+F_{z} & =-Ir_{\ell}\left\{ \int_{0}^{2\pi}B_{y}\left(r_{\ell}\cos\varphi,\,r_{\ell}\sin\varphi,\,z_{\ell}\right)\sin\varphi\,d\varphi+\int_{0}^{2\pi}B_{x}\left(r_{\ell}\cos\varphi,\,r_{\ell}\sin\varphi,\,z_{\ell}\right)\cos\varphi\,d\varphi\right\} \label{eq:F_z}\\
 B_{i} & =B_{i}\left(x,\,y,\,z\right)\quad\forall\;i\in\left\{ x,\,y,\,z\right\} \nonumber 
 \end{align}
 
@@ -1030,6 +1030,46 @@ reference "eq:coil_superposition"
  of light (rather than instantaneously) has been neglected.
  This is a good approximation because the device is small and the field
  pulses are very slow relative to the speed of light.
+\end_layout
+
+\begin_layout Subsection
+Projectile Motion Differential Equation
+\end_layout
+
+\begin_layout Standard
+Both the projectile and the accelerator will have their coils powered by
+ a capacitor connected to a power transistor.
+ For the purposes of this differential equation, the power transistor will
+ be treated as a variable resistor.
+ Neglecting drag and friction, the equation of motion of the projectile
+ is
+\begin_inset Formula 
+\begin{align*}
+m\cfrac{d^{2}z}{dt^{2}} & =\mathcal{F}_{z}
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+constraining the projectile to move on the 
+\begin_inset Formula $z$
+\end_inset
+
+ axis and ignoring rotational motion due to possible torques.
+ The force depdends on the magnetic field surrounding the projectile coil.
+ I will denote the total force on the coil
+\begin_inset Formula 
+\begin{align*}
+\mathcal{F}_{z}\left(z,\,I_{A}\right) & =\sum_{k=1}^{(r_{o}-r_{i})/2r_{w}}\left\{ \sum_{j=1}^{l_{c}/2r_{w}}F_{z}\left(I_{A},\,2r_{w}(j-1)+z_{l}+z,\,r_{i}+r_{w}/2+2r_{w}\left(k-1\right)\right)\right\} \\
+F_{z} & =F_{z}\left(I,\,z_{\ell},\,r_{\ell}\right)
+\end{align*}
+
+\end_inset
+
+
 \end_layout
 
 \end_body
